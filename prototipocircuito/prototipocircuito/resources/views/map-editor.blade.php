@@ -536,7 +536,7 @@
     <div class="top-bar">
         <span class="top-bar__title">✏️ Editor de Camins</span>
         <div class="top-bar__actions">
-            <select class="custom-lang-selector" id="custom-lang-selector">
+            <select class="custom-lang-selector notranslate" id="custom-lang-selector">
                 <option value="ca">CAT</option>
                 <option value="es">ESP</option>
                 <option value="en">ENG</option>

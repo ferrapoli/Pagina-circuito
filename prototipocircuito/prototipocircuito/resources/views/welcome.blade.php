@@ -537,7 +537,7 @@
         </div>
         <span class="top-bar__title">Circuit de Barcelona-Catalunya</span>
         <div class="top-bar__profile-wrapper">
-            <select class="custom-lang-selector" id="custom-lang-selector">
+            <select class="custom-lang-selector notranslate" id="custom-lang-selector">
                 <option value="ca">CAT</option>
                 <option value="es">ESP</option>
                 <option value="en">ENG</option>

@@ -116,7 +116,7 @@
     <header class="header">
         <h1>🗺️ {{ $nombre }}</h1>
         <div style="display:flex; gap:15px; align-items:center;">
-            <select class="custom-lang-selector" id="custom-lang-selector">
+            <select class="custom-lang-selector notranslate" id="custom-lang-selector">
                 <option value="ca">CAT</option>
                 <option value="es">ESP</option>
                 <option value="en">ENG</option>
