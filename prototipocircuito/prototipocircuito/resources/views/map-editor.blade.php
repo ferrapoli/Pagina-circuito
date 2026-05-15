@@ -452,6 +452,36 @@
             background: #fafafa; display: flex; justify-content: space-between;
             align-items: center; font-size: 12px; color: #888;
         }
+
+        /* ===== Custom Translate Select ===== */
+        .custom-lang-selector {
+            appearance: none;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: var(--color-white);
+            border-radius: 6px;
+            padding: 4px 24px 4px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px top 50%;
+            background-size: 10px auto;
+        }
+        .custom-lang-selector option {
+            color: #333;
+            background: #fff;
+        }
+
+        /* Hides the default google translate toolbar */
+        .skiptranslate iframe {
+            display: none !important;
+        }
+        body {
+            top: 0px !important; 
+        }
     </style>
 </head>
 <body>
@@ -506,6 +536,12 @@
     <div class="top-bar">
         <span class="top-bar__title">✏️ Editor de Camins</span>
         <div class="top-bar__actions">
+            <select class="custom-lang-selector" id="custom-lang-selector">
+                <option value="ca">CAT</option>
+                <option value="es">ESP</option>
+                <option value="en">ENG</option>
+                <option value="fr">FRA</option>
+            </select>
             <a href="{{ url('/') }}" class="btn-back">← Inici</a>
             <a href="{{ route('map.show') }}" class="btn-back">🗺️ Veure Mapa</a>
         </div>
@@ -1220,12 +1256,20 @@
             }
         });
     </script>
-    <!-- Google Translate Widget -->
-    <div id="google_translate_element" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; background: white; padding: 5px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);"></div>
+    <!-- Google Translate Widget Hidden -->
+    <div id="google_translate_element" style="display: none;"></div>
     <script type="text/javascript">
     function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage: 'ca'}, 'google_translate_element');
+      new google.translate.TranslateElement({pageLanguage: 'ca', autoDisplay: false}, 'google_translate_element');
     }
+    document.getElementById('custom-lang-selector').addEventListener('change', function() {
+        var lang = this.value;
+        var googleSelect = document.querySelector('.goog-te-combo');
+        if (googleSelect) {
+            googleSelect.value = lang;
+            googleSelect.dispatchEvent(new Event('change'));
+        }
+    });
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
