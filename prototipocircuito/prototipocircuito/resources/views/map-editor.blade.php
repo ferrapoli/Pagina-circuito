@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Editor de Caminos – Circuit de Barcelona-Catalunya</title>
+    <title>Editor de Camins – Circuit de Barcelona-Catalunya</title>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
@@ -455,28 +455,28 @@
     </style>
 </head>
 <body>
-    <div class="loading-overlay" id="loading-overlay">Guardando...</div>
+    <div class="loading-overlay" id="loading-overlay">Guardant...</div>
 
     <!-- Modal Marcador -->
     <div class="marker-modal-overlay" id="marker-modal-overlay">
         <div class="marker-modal">
-            <h3>Nuevo Marcador</h3>
-            <label>Nombre:</label>
-            <input type="text" id="marker-nombre" placeholder="Ej: Puerta 3" />
-            <label>Descripción:</label>
-            <input type="text" id="marker-desc" placeholder="Información opcional" />
-            <label>Tipo:</label>
+            <h3>Nou Marcador</h3>
+            <label>Nom:</label>
+            <input type="text" id="marker-nombre" placeholder="Ex: Porta 3" />
+            <label>Descripció:</label>
+            <input type="text" id="marker-desc" placeholder="Informació opcional" />
+            <label>Tipus:</label>
             <select id="marker-tipo">
-                <option value="1">🚪 Entradas</option>
-                <option value="2">🛒 Tiendas</option>
-                <option value="3">🅿️ Parkings</option>
-                <option value="4">🚾 Baños</option>
-                <option value="5">💺 Asientos</option>
-                <option value="6">🟣 Punto Violeta</option>
-                <option value="7">♻️ Reciclaje</option>
+                <option value="1">🚪 Entrades</option>
+                <option value="2">🛒 Botigues</option>
+                <option value="3">🅿️ Aparcaments</option>
+                <option value="4">🚾 Banys</option>
+                <option value="5">💺 Seients</option>
+                <option value="6">🟣 Punt Violeta</option>
+                <option value="7">♻️ Reciclatge</option>
             </select>
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <button class="btn-cancel" id="btn-cancel-marker">Cancelar</button>
+                <button class="btn-cancel" id="btn-cancel-marker">Cancel·lar</button>
                 <button class="btn-save-marker" id="btn-save-marker">Guardar Marcador</button>
             </div>
         </div>
@@ -486,28 +486,28 @@
     <div class="marker-mgmt-overlay" id="marker-mgmt-overlay">
         <div class="marker-mgmt-panel">
             <div class="marker-mgmt-header">
-                <h3>📋 Gestión de Marcadores</h3>
+                <h3>📋 Gestió de Marcadors</h3>
                 <button class="marker-mgmt-close" id="marker-mgmt-close">✕</button>
             </div>
             <div class="marker-mgmt-filters" id="marker-mgmt-filters">
                 <!-- Filter chips se generan con JS -->
             </div>
             <div class="marker-mgmt-list" id="marker-mgmt-list">
-                <div class="marker-list-empty">Selecciona una categoría para ver sus marcadores</div>
+                <div class="marker-list-empty">Selecciona una categoria per veure els seus marcadors</div>
             </div>
             <div class="marker-mgmt-footer">
-                <span id="marker-mgmt-count">0 marcadores</span>
-                <span style="font-style:italic;">Datos via API REST</span>
+                <span id="marker-mgmt-count">0 marcadors</span>
+                <span style="font-style:italic;">Dades via API REST</span>
             </div>
         </div>
     </div>
 
     <!-- Top Bar -->
     <div class="top-bar">
-        <span class="top-bar__title">✏️ Editor de Caminos</span>
+        <span class="top-bar__title">✏️ Editor de Camins</span>
         <div class="top-bar__actions">
-            <a href="{{ url('/') }}" class="btn-back">← Inicio</a>
-            <a href="{{ route('map.show') }}" class="btn-back">🗺️ Ver Mapa</a>
+            <a href="{{ url('/') }}" class="btn-back">← Inici</a>
+            <a href="{{ route('map.show') }}" class="btn-back">🗺️ Veure Mapa</a>
         </div>
     </div>
 
@@ -515,15 +515,15 @@
     <div class="editor-layout">
         <!-- Left Sidebar: Status/Color Selector -->
         <div class="sidebar-left" id="sidebar-left">
-            <div class="status-item active" data-estado="abierto" data-color="#E53935" id="status-abierto" title="Camino abierto para usuarios">
+            <div class="status-item active" data-estado="abierto" data-color="#E53935" id="status-abierto" title="Camí obert per a usuaris">
                 <div class="status-item__color" style="background-color: #E53935;"></div>
-                <span class="status-item__label">Abierto</span>
+                <span class="status-item__label">Obert</span>
             </div>
-            <div class="status-item" data-estado="obras" data-color="#F5C242" id="status-obras" title="En obras - No se puede pasar">
+            <div class="status-item" data-estado="obras" data-color="#F5C242" id="status-obras" title="En obres - No s'hi pot passar">
                 <div class="status-item__color" style="background-color: #F5C242;"></div>
-                <span class="status-item__label">OBReS</span>
+                <span class="status-item__label">OBRES</span>
             </div>
-            <div class="status-item" data-estado="staff" data-color="#42A5F5" id="status-staff" title="Solo para staff">
+            <div class="status-item" data-estado="staff" data-color="#42A5F5" id="status-staff" title="Només per a personal (staff)">
                 <div class="status-item__color" style="background-color: #42A5F5;"></div>
                 <span class="status-item__label">Staff</span>
             </div>
@@ -535,35 +535,35 @@
         <!-- Right Sidebar: Tools -->
         <div class="sidebar-right" id="sidebar-right">
             <!-- Pencil / Freehand Draw tool -->
-            <div class="tool-btn" id="tool-draw" title="Dibujar libremente (Lápiz)">
+            <div class="tool-btn" id="tool-draw" title="Dibuixar lliurement (Llapis)">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
                 </svg>
             </div>
 
             <!-- Hand / Pan tool -->
-            <div class="tool-btn active" id="tool-pan" title="Mover mapa (Mano)">
+            <div class="tool-btn active" id="tool-pan" title="Moure mapa (Mà)">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M18 24h-6.55c-1.08 0-2.14-.45-2.89-1.23l-5.5-6.41 1.36-1.33c.38-.37.88-.58 1.41-.58h.2l3.97.7V3.5C10 2.67 10.67 2 11.5 2s1.5.67 1.5 1.5v7h.5c.15 0 .29.02.43.05l5.76 1.45c.87.22 1.49.99 1.49 1.89V22c0 1.1-.9 2-2 2h-.18zM5.13 17.27L9.91 22.8c.38.43.91.7 1.54.7H18c.55 0 1-.45 1-1v-7.61l-5.57-1.39H13V3.5c0-.28-.22-.5-.5-.5s-.5.22-.5.5v10.5H10l-4.67-.86-.2.13z"/>
                 </svg>
             </div>
 
             <!-- Select / Cursor tool -->
-            <div class="tool-btn" id="tool-select" title="Seleccionar caminos (Cursor)">
+            <div class="tool-btn" id="tool-select" title="Seleccionar camins (Cursor)">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M7 2l12 11.2-5.8.5 3.3 7.3-2.25.9-3.2-7.4L7 18z"/>
                 </svg>
             </div>
 
             <!-- Marker / Pin tool -->
-            <div class="tool-btn" id="tool-marker" title="Añadir Marcador de Firebase (Pin)">
+            <div class="tool-btn" id="tool-marker" title="Afegir Marcador (Pin)">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                 </svg>
             </div>
 
             <!-- Marker Management / Active markers -->
-            <div class="tool-btn" id="tool-mgmt" title="Gestionar Marcadores Activos">
+            <div class="tool-btn" id="tool-mgmt" title="Gestionar Marcadors Actius">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
                 </svg>
@@ -572,7 +572,7 @@
             <div class="tool-separator"></div>
 
             <!-- Save button -->
-            <div class="btn-save" id="btn-save" title="Guardar todos los cambios al Servidor">
+            <div class="btn-save" id="btn-save" title="Guardar tots els canvis al Servidor">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
                 </svg>
@@ -740,7 +740,7 @@
             const tipo = parseInt(document.getElementById('marker-tipo').value) || 1;
 
             if (!nombre) {
-                alert('El nombre es obligatorio');
+                alert('El nom és obligatori');
                 return;
             }
 
@@ -771,11 +771,11 @@
                 const data = await response.json();
 
                 createMarkerOnMap(data.id, lat, lng, nombre, desc, tipo, true);
-                showToast('Marcador guardado', 'success');
+                showToast('Marcador guardat', 'success');
                 if (currentTool === 'mgmt') refreshMgmtList();
             } catch (err) {
                 console.error("Error adding document: ", err);
-                showToast('Error al guardar marcador', 'error');
+                showToast('Error en guardar el marcador', 'error');
             } finally {
                 loadingOverlay.classList.remove('show');
                 pendingMarkerLatLng = null;
@@ -784,7 +784,7 @@
         });
 
         window.deleteApiMarker = async function(id) {
-            if (confirm('¿Estás seguro de eliminar este marcador?')) {
+            if (confirm('Estàs segur que vols eliminar aquest marcador?')) {
                 const loadingOverlay = document.getElementById('loading-overlay');
                 loadingOverlay.classList.add('show');
                 try {
@@ -795,12 +795,12 @@
                         map.removeLayer(firebaseMarkers[id]);
                         delete firebaseMarkers[id];
                     }
-                    showToast('Marcador eliminado', 'success');
+                    showToast('Marcador eliminat', 'success');
                     map.closePopup();
                     if (currentTool === 'mgmt') refreshMgmtList();
                 } catch (e) {
                     console.error('Error deleting doc', e);
-                    showToast('Error al eliminar', 'error');
+                    showToast('Error en eliminar', 'error');
                 } finally {
                     loadingOverlay.classList.remove('show');
                 }
@@ -818,18 +818,18 @@
         };
 
         const TXT_TIPOS = {
-            1: 'Entradas',
-            2: 'Tiendas',
-            3: 'Parkings',
-            4: 'Baños',
-            5: 'Asientos',
-            6: 'Punto Violeta',
-            7: 'Reciclaje'
+            1: 'Entrades',
+            2: 'Botigues',
+            3: 'Aparcaments',
+            4: 'Banys',
+            5: 'Seients',
+            6: 'Punt Violeta',
+            7: 'Reciclatge'
         };
 
         function createMarkerOnMap(id, lat, lng, nombre, descripcion, tipo, activo = true) {
             const emoji = EMOJIS[tipo] || '📍';
-            const tipoNom = TXT_TIPOS[tipo] || 'Personalizado';
+            const tipoNom = TXT_TIPOS[tipo] || 'Personalitzat';
 
             const customIcon = L.divIcon({
                 className: 'emoji-marker',
@@ -845,8 +845,8 @@
                 if (currentTool === 'select') {
                     const popupContent = `
                         <div class="path-popup">
-                            <strong>${emoji} ${nombre}</strong> ${!activo ? '<span style="color:red">(Inactivo)</span>' : ''}<br>
-                            <small>${descripcion || 'Sin descripción'} (Tipo: ${tipoNom})</small><br>
+                            <strong>${emoji} ${nombre}</strong> ${!activo ? '<span style="color:red">(Inactiu)</span>' : ''}<br>
+                            <small>${descripcion || 'Sense descripció'} (Tipus: ${tipoNom})</small><br>
                             <button style="background:#555;margin-top:10px;" onclick="deleteApiMarker('${id}')">Eliminar Marcador</button>
                         </div>
                     `;
@@ -915,8 +915,8 @@
                 const label = layer.feature?.properties?.estado || 'Desconocido';
                 const popupContent = `
                     <div class="path-popup">
-                        <strong>Camino: ${label.toUpperCase()}</strong><br>
-                        <button onclick="deleteLayer(${L.stamp(layer)})">Eliminar Camino</button>
+                        <strong>Camí: ${label.toUpperCase()}</strong><br>
+                        <button onclick="deleteLayer(${L.stamp(layer)})">Eliminar Camí</button>
                     </div>
                 `;
                 
@@ -976,7 +976,7 @@
             // "Todos" chip
             const btnAll = document.createElement('button');
             btnAll.className = 'filter-chip' + (currentMgmtFilter === null ? ' active' : '');
-            btnAll.innerHTML = 'Todos';
+            btnAll.innerHTML = 'Tots';
             btnAll.onclick = () => { currentMgmtFilter = null; buildFilters(); renderMgmtList(); };
             filtersContainer.appendChild(btnAll);
 
@@ -992,13 +992,13 @@
         }
 
         async function refreshMgmtList() {
-            listContainer.innerHTML = '<div class="marker-list-empty">Cargando...</div>';
+            listContainer.innerHTML = '<div class="marker-list-empty">Carregant...</div>';
             try {
                 const res = await fetch('/api/marcadores');
                 mgmtMarkersData = await res.json();
                 renderMgmtList();
             } catch (e) {
-                listContainer.innerHTML = '<div class="marker-list-empty" style="color:red">Error al cargar marcadores</div>';
+                listContainer.innerHTML = '<div class="marker-list-empty" style="color:red">Error en carregar marcadors</div>';
             }
         }
 
@@ -1010,10 +1010,10 @@
                 filtered = mgmtMarkersData.filter(m => m.tipo === currentMgmtFilter);
             }
             
-            mgmtCount.textContent = `${filtered.length} marcadores`;
+            mgmtCount.textContent = `${filtered.length} marcadors`;
 
             if (filtered.length === 0) {
-                listContainer.innerHTML = '<div class="marker-list-empty">No hay marcadores en esta categoría</div>';
+                listContainer.innerHTML = '<div class="marker-list-empty">No hi ha marcadors en aquesta categoria</div>';
                 return;
             }
 
@@ -1022,7 +1022,7 @@
                 div.className = 'marker-list-item' + (!m.activo ? ' inactive' : '');
                 
                 const emoji = EMOJIS[m.tipo] || '📍';
-                const desc = m.descripcion || 'Sin descripción';
+                const desc = m.descripcion || 'Sense descripció';
                 
                 div.innerHTML = `
                     <div class="mli-emoji">${emoji}</div>
@@ -1067,7 +1067,7 @@
                 
             } catch(e) {
                 console.error(e);
-                alert('Error al actualizar el marcador');
+                alert('Error en actualitzar el marcador');
                 refreshMgmtList();
             }
         };
@@ -1188,14 +1188,14 @@
                 const result = await response.json();
 
                 if (result.success) {
-                    showToast('Mapa subido y actualizado correctamente.', 'success');
+                    showToast('Mapa pujat i actualitzat correctament.', 'success');
                 } else {
-                    showToast('Error al subir el mapa.', 'error');
+                    showToast('Error en pujar el mapa.', 'error');
                     console.error(result.error);
                 }
             } catch (err) {
                 console.error('Save error:', err);
-                showToast('Error en la conexión al guardar.', 'error');
+                showToast('Error en la connexió en guardar.', 'error');
             } finally {
                 loadingOverlay.classList.remove('show');
             }

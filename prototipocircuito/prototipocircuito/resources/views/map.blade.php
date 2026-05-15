@@ -85,7 +85,7 @@
 <body>
     <header class="header">
         <h1>🗺️ {{ $nombre }}</h1>
-        <a href="{{ url('/') }}" class="btn-back">← Inicio</a>
+        <a href="{{ url('/') }}" class="btn-back">← Inici</a>
     </header>
 
     <div id="map"></div>
@@ -179,18 +179,18 @@
         };
 
         const TXT_TIPOS = {
-            1: 'Entradas',
-            2: 'Tiendas',
-            3: 'Parkings',
-            4: 'Baños',
-            5: 'Asientos',
-            6: 'Punto Violeta',
-            7: 'Reciclaje'
+            1: 'Entrades',
+            2: 'Botigues',
+            3: 'Aparcaments',
+            4: 'Banys',
+            5: 'Seients',
+            6: 'Punt Violeta',
+            7: 'Reciclatge'
         };
 
         function createMarkerOnMap(id, lat, lng, nombre, descripcion, tipo) {
             const emoji = EMOJIS[tipo] || '📍';
-            const tipoNom = TXT_TIPOS[tipo] || 'Personalizado';
+            const tipoNom = TXT_TIPOS[tipo] || 'Personalitzat';
 
             // Crear divIcon con el emoji
             const customIcon = L.divIcon({
@@ -206,7 +206,7 @@
             const popupContent = `
                 <div class="path-popup">
                     <strong>${emoji} ${nombre}</strong><br>
-                    <small>${descripcion} (Tipo: ${tipoNom})</small>
+                    <small>${descripcion} (Tipus: ${tipoNom})</small>
                 </div>
             `;
             m.bindPopup(popupContent);
