@@ -348,6 +348,110 @@
             font-size: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
+
+        /* ===== Marker Management Panel ===== */
+        .marker-mgmt-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.55); z-index: 10001;
+            display: none; align-items: center; justify-content: center;
+            backdrop-filter: blur(3px);
+        }
+        .marker-mgmt-overlay.show { display: flex; }
+
+        .marker-mgmt-panel {
+            background: #fff; border-radius: 12px; width: 480px; max-width: 95vw;
+            max-height: 85vh; display: flex; flex-direction: column;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+            animation: panelSlideIn 0.25s ease-out;
+            overflow: hidden;
+        }
+        @keyframes panelSlideIn {
+            from { transform: translateY(30px) scale(0.97); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .marker-mgmt-header {
+            padding: 16px 20px; background: var(--color-primary); color: #fff;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .marker-mgmt-header h3 { font-size: 15px; font-weight: 700; }
+        .marker-mgmt-close {
+            background: rgba(255,255,255,0.2); border: none; color: #fff;
+            width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+            font-size: 16px; display: flex; align-items: center; justify-content: center;
+            transition: background 0.2s;
+        }
+        .marker-mgmt-close:hover { background: rgba(255,255,255,0.35); }
+
+        .marker-mgmt-filters {
+            display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 20px;
+            border-bottom: 1px solid #eee; background: #fafafa;
+        }
+        .filter-chip {
+            padding: 6px 12px; border-radius: 20px; border: 1px solid #ddd;
+            background: #fff; cursor: pointer; font-size: 12px; font-weight: 600;
+            font-family: inherit; transition: all 0.2s; display: flex;
+            align-items: center; gap: 4px; color: #555;
+        }
+        .filter-chip:hover { border-color: var(--color-primary); color: var(--color-primary); }
+        .filter-chip.active {
+            background: var(--color-primary); color: #fff;
+            border-color: var(--color-primary);
+        }
+
+        .marker-mgmt-list {
+            flex: 1; overflow-y: auto; padding: 10px 20px;
+        }
+        .marker-mgmt-list::-webkit-scrollbar { width: 6px; }
+        .marker-mgmt-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+        .marker-list-empty {
+            text-align: center; color: #999; padding: 40px 20px;
+            font-size: 14px;
+        }
+
+        .marker-list-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 14px; border-radius: 8px; margin-bottom: 6px;
+            border: 1px solid #eee; transition: all 0.25s;
+            background: #fff;
+        }
+        .marker-list-item:hover { border-color: #ccc; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+
+        .marker-list-item.inactive {
+            opacity: 0.45; background: #f8f8f8;
+        }
+        .marker-list-item.inactive .mli-emoji { filter: grayscale(1); }
+
+        .mli-emoji { font-size: 24px; flex-shrink: 0; transition: filter 0.25s; }
+        .mli-info { flex: 1; min-width: 0; }
+        .mli-name { font-size: 13px; font-weight: 700; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mli-desc { font-size: 11px; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+        .mli-coords { font-size: 10px; color: #aaa; margin-top: 2px; }
+
+        /* Toggle switch */
+        .toggle-switch {
+            position: relative; width: 42px; height: 24px; flex-shrink: 0;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: #ccc; border-radius: 12px; cursor: pointer;
+            transition: background 0.3s;
+        }
+        .toggle-slider::before {
+            content: ''; position: absolute; width: 18px; height: 18px;
+            left: 3px; bottom: 3px; background: #fff; border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .toggle-switch input:checked + .toggle-slider { background: #4CAF50; }
+        .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+        .marker-mgmt-footer {
+            padding: 12px 20px; border-top: 1px solid #eee;
+            background: #fafafa; display: flex; justify-content: space-between;
+            align-items: center; font-size: 12px; color: #888;
+        }
     </style>
 </head>
 <body>
@@ -374,6 +478,26 @@
             <div style="display: flex; gap: 10px; margin-top: 15px;">
                 <button class="btn-cancel" id="btn-cancel-marker">Cancelar</button>
                 <button class="btn-save-marker" id="btn-save-marker">Guardar Marcador</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel Gestión Marcadores Activos -->
+    <div class="marker-mgmt-overlay" id="marker-mgmt-overlay">
+        <div class="marker-mgmt-panel">
+            <div class="marker-mgmt-header">
+                <h3>📋 Gestión de Marcadores</h3>
+                <button class="marker-mgmt-close" id="marker-mgmt-close">✕</button>
+            </div>
+            <div class="marker-mgmt-filters" id="marker-mgmt-filters">
+                <!-- Filter chips se generan con JS -->
+            </div>
+            <div class="marker-mgmt-list" id="marker-mgmt-list">
+                <div class="marker-list-empty">Selecciona una categoría para ver sus marcadores</div>
+            </div>
+            <div class="marker-mgmt-footer">
+                <span id="marker-mgmt-count">0 marcadores</span>
+                <span style="font-style:italic;">Datos via API REST</span>
             </div>
         </div>
     </div>
@@ -435,6 +559,13 @@
             <div class="tool-btn" id="tool-marker" title="Añadir Marcador de Firebase (Pin)">
                 <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                </svg>
+            </div>
+
+            <!-- Marker Management / Active markers -->
+            <div class="tool-btn" id="tool-mgmt" title="Gestionar Marcadores Activos">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
                 </svg>
             </div>
 
@@ -620,18 +751,28 @@
             loadingOverlay.classList.add('show');
 
             try {
-                // Instanciar guardado Firestore
-                const docRef = await addDoc(collection(db, "marcadores_generales"), {
-                    nombre: nombre,
-                    descripcion: desc,
-                    tipo: tipo,
-                    usuario: "admin",
-                    lugar: new GeoPoint(lat, lng)
+                const response = await fetch('/api/marcadores', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        titulo: nombre,
+                        descripcion: desc,
+                        tipo: tipo,
+                        latitud: lat,
+                        longitud: lng,
+                        activo: true
+                    })
                 });
 
-                // Añadir al mapa visualmente
-                createMarkerOnMap(docRef.id, lat, lng, nombre, desc, tipo);
-                showToast('Marcador guardado en Firebase', 'success');
+                if (!response.ok) throw new Error('Error en API');
+                const data = await response.json();
+
+                createMarkerOnMap(data.id, lat, lng, nombre, desc, tipo, true);
+                showToast('Marcador guardado', 'success');
+                if (currentTool === 'mgmt') refreshMgmtList();
             } catch (err) {
                 console.error("Error adding document: ", err);
                 showToast('Error al guardar marcador', 'error');
@@ -642,21 +783,24 @@
             }
         });
 
-        window.deleteFirebaseMarker = async function(id) {
-            if (confirm('¿Estás seguro de eliminar este marcador de Firebase?')) {
+        window.deleteApiMarker = async function(id) {
+            if (confirm('¿Estás seguro de eliminar este marcador?')) {
                 const loadingOverlay = document.getElementById('loading-overlay');
                 loadingOverlay.classList.add('show');
                 try {
-                    await deleteDoc(doc(db, "marcadores_generales", id));
+                    const res = await fetch('/api/marcadores/' + id, { method: 'DELETE' });
+                    if (!res.ok) throw new Error('Error deleting');
+                    
                     if (firebaseMarkers[id]) {
                         map.removeLayer(firebaseMarkers[id]);
                         delete firebaseMarkers[id];
                     }
                     showToast('Marcador eliminado', 'success');
                     map.closePopup();
+                    if (currentTool === 'mgmt') refreshMgmtList();
                 } catch (e) {
                     console.error('Error deleting doc', e);
-                    showToast('Error al eliminar de Firebase', 'error');
+                    showToast('Error al eliminar', 'error');
                 } finally {
                     loadingOverlay.classList.remove('show');
                 }
@@ -683,14 +827,13 @@
             7: 'Reciclaje'
         };
 
-        function createMarkerOnMap(id, lat, lng, nombre, descripcion, tipo) {
+        function createMarkerOnMap(id, lat, lng, nombre, descripcion, tipo, activo = true) {
             const emoji = EMOJIS[tipo] || '📍';
             const tipoNom = TXT_TIPOS[tipo] || 'Personalizado';
 
-            // Crear divIcon con el emoji
             const customIcon = L.divIcon({
                 className: 'emoji-marker',
-                html: emoji,
+                html: `<div style="${!activo ? 'filter: grayscale(1); opacity: 0.5;' : ''}">${emoji}</div>`,
                 iconSize: [36, 36],
                 iconAnchor: [18, 18],
                 popupAnchor: [0, -18]
@@ -698,45 +841,44 @@
 
             const m = L.marker([lat, lng], { icon: customIcon }).addTo(map);
             
-            // Interaction logic for the marker (only delete when in select mode)
             m.on('click', function(e) {
                 if (currentTool === 'select') {
                     const popupContent = `
                         <div class="path-popup">
-                            <strong>${emoji} ${nombre}</strong><br>
-                            <small>${descripcion} (Tipo: ${tipoNom})</small><br>
-                            <button style="background:#555;margin-top:10px;" onclick="deleteFirebaseMarker('${id}')">Eliminar Marcador</button>
+                            <strong>${emoji} ${nombre}</strong> ${!activo ? '<span style="color:red">(Inactivo)</span>' : ''}<br>
+                            <small>${descripcion || 'Sin descripción'} (Tipo: ${tipoNom})</small><br>
+                            <button style="background:#555;margin-top:10px;" onclick="deleteApiMarker('${id}')">Eliminar Marcador</button>
                         </div>
                     `;
                     m.bindPopup(popupContent).openPopup();
                 }
             });
 
+            m.markerData = { id, lat, lng, nombre, descripcion, tipo, activo };
             firebaseMarkers[id] = m;
         }
 
-        async function loadFirebaseMarkers() {
+        async function loadApiMarkers() {
             try {
-                const querySnapshot = await getDocs(collection(db, "marcadores_generales"));
-                querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    if (data.lugar && data.lugar.latitude) {
-                        createMarkerOnMap(
-                            docSnap.id, 
-                            data.lugar.latitude, 
-                            data.lugar.longitude, 
-                            data.nombre || '', 
-                            data.descripcion || '', 
-                            data.tipo || ''
-                        );
-                    }
+                const response = await fetch('/api/marcadores');
+                const data = await response.json();
+                data.forEach((marker) => {
+                    createMarkerOnMap(
+                        marker.id, 
+                        parseFloat(marker.latitud), 
+                        parseFloat(marker.longitud), 
+                        marker.titulo || '', 
+                        marker.descripcion || '', 
+                        marker.tipo || 1,
+                        marker.activo
+                    );
                 });
             } catch (e) {
-                console.warn('Error loading markers (puede que falte configuración):', e);
+                console.warn('Error loading markers from API:', e);
             }
         }
         
-        loadFirebaseMarkers();
+        loadApiMarkers();
 
         // Use map mouseup AND window mouseup to ensure it completes even if mouse leaves map
         function finishDrawing() {
@@ -807,12 +949,137 @@
         };
 
         // ============================================================
+        // Gestión de Marcadores (Panel)
+        // ============================================================
+        const mgmtOverlay = document.getElementById('marker-mgmt-overlay');
+        const btnCloseMgmt = document.getElementById('marker-mgmt-close');
+        const filtersContainer = document.getElementById('marker-mgmt-filters');
+        const listContainer = document.getElementById('marker-mgmt-list');
+        const mgmtCount = document.getElementById('marker-mgmt-count');
+        let currentMgmtFilter = null;
+        let mgmtMarkersData = [];
+
+        btnCloseMgmt.addEventListener('click', () => {
+            mgmtOverlay.classList.remove('show');
+            setTool('pan');
+        });
+
+        async function openMgmtPanel() {
+            mgmtOverlay.classList.add('show');
+            buildFilters();
+            await refreshMgmtList();
+        }
+
+        function buildFilters() {
+            filtersContainer.innerHTML = '';
+            
+            // "Todos" chip
+            const btnAll = document.createElement('button');
+            btnAll.className = 'filter-chip' + (currentMgmtFilter === null ? ' active' : '');
+            btnAll.innerHTML = 'Todos';
+            btnAll.onclick = () => { currentMgmtFilter = null; buildFilters(); renderMgmtList(); };
+            filtersContainer.appendChild(btnAll);
+
+            // Chips por tipo
+            Object.keys(TXT_TIPOS).forEach(tipo => {
+                const t = parseInt(tipo);
+                const btn = document.createElement('button');
+                btn.className = 'filter-chip' + (currentMgmtFilter === t ? ' active' : '');
+                btn.innerHTML = `${EMOJIS[t]} ${TXT_TIPOS[t]}`;
+                btn.onclick = () => { currentMgmtFilter = t; buildFilters(); renderMgmtList(); };
+                filtersContainer.appendChild(btn);
+            });
+        }
+
+        async function refreshMgmtList() {
+            listContainer.innerHTML = '<div class="marker-list-empty">Cargando...</div>';
+            try {
+                const res = await fetch('/api/marcadores');
+                mgmtMarkersData = await res.json();
+                renderMgmtList();
+            } catch (e) {
+                listContainer.innerHTML = '<div class="marker-list-empty" style="color:red">Error al cargar marcadores</div>';
+            }
+        }
+
+        function renderMgmtList() {
+            listContainer.innerHTML = '';
+            
+            let filtered = mgmtMarkersData;
+            if (currentMgmtFilter !== null) {
+                filtered = mgmtMarkersData.filter(m => m.tipo === currentMgmtFilter);
+            }
+            
+            mgmtCount.textContent = `${filtered.length} marcadores`;
+
+            if (filtered.length === 0) {
+                listContainer.innerHTML = '<div class="marker-list-empty">No hay marcadores en esta categoría</div>';
+                return;
+            }
+
+            filtered.forEach(m => {
+                const div = document.createElement('div');
+                div.className = 'marker-list-item' + (!m.activo ? ' inactive' : '');
+                
+                const emoji = EMOJIS[m.tipo] || '📍';
+                const desc = m.descripcion || 'Sin descripción';
+                
+                div.innerHTML = `
+                    <div class="mli-emoji">${emoji}</div>
+                    <div class="mli-info">
+                        <div class="mli-name">${m.titulo}</div>
+                        <div class="mli-desc">${desc}</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" onchange="toggleMarkerActive(${m.id}, this.checked)" ${m.activo ? 'checked' : ''}>
+                        <span class="toggle-slider"></span>
+                    </label>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        window.toggleMarkerActive = async function(id, isChecked) {
+            try {
+                const res = await fetch('/api/marcadores/' + id, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': CSRF_TOKEN
+                    },
+                    body: JSON.stringify({ activo: isChecked })
+                });
+                if (!res.ok) throw new Error('Update failed');
+                
+                if (firebaseMarkers[id]) {
+                    const mLayer = firebaseMarkers[id];
+                    const data = mLayer.markerData;
+                    data.activo = isChecked;
+                    
+                    map.removeLayer(mLayer);
+                    createMarkerOnMap(data.id, data.lat, data.lng, data.nombre, data.descripcion, data.tipo, isChecked);
+                }
+                
+                const mData = mgmtMarkersData.find(x => x.id === id);
+                if (mData) mData.activo = isChecked;
+                renderMgmtList();
+                
+            } catch(e) {
+                console.error(e);
+                alert('Error al actualizar el marcador');
+                refreshMgmtList();
+            }
+        };
+
+        // ============================================================
         // Tools & Sidebar Logic
         // ============================================================
         const toolDraw   = document.getElementById('tool-draw');
         const toolPan    = document.getElementById('tool-pan');
         const toolSelect = document.getElementById('tool-select');
         const toolMarker = document.getElementById('tool-marker');
+        const toolMgmt   = document.getElementById('tool-mgmt');
         const sidebarLeft = document.getElementById('sidebar-left');
 
         function setTool(tool) {
@@ -823,6 +1090,7 @@
             toolPan.classList.toggle('active', tool === 'pan');
             toolSelect.classList.toggle('active', tool === 'select');
             toolMarker.classList.toggle('active', tool === 'marker');
+            if (toolMgmt) toolMgmt.classList.toggle('active', tool === 'mgmt');
 
             // Show/Hide Left Panel based on pencil tool
             if (tool === 'draw') {
@@ -836,7 +1104,7 @@
                 map.dragging.enable();
                 mapContainer.classList.remove('crosshair-cursor-enabled', 'pointer-cursor-enabled');
             } else if (tool === 'draw') {
-                map.dragging.disable(); // Prevent map pan when dragging mouse to draw
+                map.dragging.disable();
                 mapContainer.classList.remove('pointer-cursor-enabled');
                 mapContainer.classList.add('crosshair-cursor-enabled');
                 map.closePopup();
@@ -845,10 +1113,15 @@
                 mapContainer.classList.remove('crosshair-cursor-enabled');
                 mapContainer.classList.add('pointer-cursor-enabled');
             } else if (tool === 'marker') {
-                map.dragging.disable(); // Para no arrastrar al poner pin
+                map.dragging.disable();
                 mapContainer.classList.remove('pointer-cursor-enabled');
                 mapContainer.classList.add('crosshair-cursor-enabled');
                 map.closePopup();
+            } else if (tool === 'mgmt') {
+                map.dragging.enable();
+                mapContainer.classList.remove('crosshair-cursor-enabled');
+                mapContainer.classList.add('pointer-cursor-enabled');
+                openMgmtPanel();
             }
         }
 
@@ -856,6 +1129,7 @@
         toolPan.addEventListener('click', () => setTool('pan'));
         toolSelect.addEventListener('click', () => setTool('select'));
         toolMarker.addEventListener('click', () => setTool('marker'));
+        if (toolMgmt) toolMgmt.addEventListener('click', () => setTool('mgmt'));
 
         // Left Panel Color Selector
         const statusItems = document.querySelectorAll('.status-item');

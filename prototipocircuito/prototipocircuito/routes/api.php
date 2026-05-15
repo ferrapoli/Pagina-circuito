@@ -9,4 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::apiResource('marcadores', MarcadorController::class)
-    ->only(['index', 'store', 'destroy']);
+    ->only(['index', 'store', 'update', 'destroy']);

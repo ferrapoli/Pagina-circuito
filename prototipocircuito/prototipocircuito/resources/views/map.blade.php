@@ -212,28 +212,27 @@
             m.bindPopup(popupContent);
         }
 
-        async function loadFirebaseMarkers() {
+        async function loadApiMarkers() {
             try {
-                const querySnapshot = await getDocs(collection(db, "marcadores_generales"));
-                querySnapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    if (data.lugar && data.lugar.latitude) {
-                        createMarkerOnMap(
-                            docSnap.id, 
-                            data.lugar.latitude, 
-                            data.lugar.longitude, 
-                            data.nombre || '', 
-                            data.descripcion || '', 
-                            data.tipo || ''
-                        );
-                    }
+                const response = await fetch('/api/marcadores?solo_activos=1');
+                const data = await response.json();
+                
+                data.forEach((marker) => {
+                    createMarkerOnMap(
+                        marker.id, 
+                        parseFloat(marker.latitud), 
+                        parseFloat(marker.longitud), 
+                        marker.titulo || '', 
+                        marker.descripcion || '', 
+                        marker.tipo || 1
+                    );
                 });
             } catch (e) {
-                console.warn('Error loading markers:', e);
+                console.warn('Error loading markers from API:', e);
             }
         }
         
-        loadFirebaseMarkers();
+        loadApiMarkers();
     </script>
 </body>
 </html>
